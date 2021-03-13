@@ -1,0 +1,62 @@
+#cloud-config
+users:
+  - name: admin
+    groups: users, admin, docker
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - <ssh-key>
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - zsh
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+  - git
+
+# Enable ipv4 forwarding, required on CIS hardened machines
+write_files:
+  - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
+    content: |
+      net.ipv4.conf.all.forwarding=1
+
+runcmd:
+  # Update apt and install Docker
+  - apt-get update -y
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get install -y docker-ce docker-ce-cli containerd.io
+  - systemctl enable docker --now
+  # Download latest docker-compose
+  - curl https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep docker-compose-Linux-x86_64 | cut -d '"' -f 4 | wget -qi -
+  - cp docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+  # Configure ohmyzsh
+  - runuser -l admin -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+  - runuser -l admin -c 'wget -O /home/fluit/.zshrc https://raw.githubusercontent.com/stefanfluit/default_files/master/oh_my_zsh/.zshrc'
+  - chsh -s $(which zsh) admin
+  # Download latest Prometheus Node Exporter
+  # - curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
+  # - tar xvf  $(find $(pwd) -name 'node_exporter*.tar.gz')
+  # - cp $(find $(pwd) -name 'node_exporter*' -type d)/node_exporter /usr/local/bin
+  # - curl -s https://gist.githubusercontent.com/stefanfluit/8d1c7fb1b2af8da487295ada4e64060c/raw/c870e1000b1b22f87cfb5f229bb878f4f786e07b/node_exporter.service >> /etc/systemd/system/node_exporter.service
+  # - groupadd --system node_exporter
+  # - useradd -s /sbin/nologin -r -g node_exporter node_exporter
+  # - systemctl daemon-reload
+  # - systemctl enable node_exporter --now
+  # Configure Bitwarden Server dir
+  - mkdir -p /var/lib/bitwarden_deploy
+  # Setup UFW
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  # Change this to your IP for Prometheus monitoring
+  # - ufw allow from <YOUR IP>  to any port 9100
+  - ufw allow 443/tcp
+  - ufw allow 80/tcp
+  - ufw allow ssh
+  - echo "y" | ufw enable
