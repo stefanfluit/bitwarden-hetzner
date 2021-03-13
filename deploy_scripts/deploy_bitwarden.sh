@@ -3,7 +3,7 @@
 declare DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-. "${DIR}../config/config.sh"
+. "${DIR}/../config/config.sh"
 
 declare output_ssh_key
 output_ssh_key$(< ${SSH_KEY})
@@ -15,7 +15,7 @@ sed -i "s/fqdn/${VPS_ENV}.${DOMAIN_ENV}/g" "${DIR}"/docker-compose/docker-compos
 sed -i "s/email/${ADMIN_MAIL}/g" "${DIR}"/docker-compose/docker-compose.yml 
 
 printf "Applying Terraform configuration\n"
-cd "${DIR}"../terraform && terraform init &> /dev/null && terraform plan &> /dev/null && terraform apply -auto-approve &> /dev/null && printf "Done!\n"
+cd "${DIR}"/../terraform && terraform init &> /dev/null && terraform plan &> /dev/null && terraform apply -auto-approve &> /dev/null && printf "Done!\n"
 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
