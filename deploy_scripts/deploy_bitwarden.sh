@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 declare output_ssh_key
 output_ssh_key$(< ${SSH_KEY})
 
-ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_bitwarden -C "${ADMIN_MAIL}"
+ssh-keygen -t ed25519 -f "${SSH_KEY}" -C "${ADMIN_MAIL}"
 sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml
 sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml 
 sed -i "s/fqdn/${VPS_ENV}.${DOMAIN_ENV}/g" "${DIR}"/docker-compose/docker-compose.yml
