@@ -47,7 +47,7 @@ git clone https://github.com/stefanfluit/bitwarden-hetzner.git
 ```
 Change the variables to whatever you want it:
 ```
-vim /bitwarden-hetzner/config/config.sh
+vim bitwarden-hetzner/config/config.sh
 ```
 Run the script:
 ```
