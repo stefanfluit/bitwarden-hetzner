@@ -18,7 +18,7 @@ declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 
 printf "Adding Bitwarden IP to AWS Route53..\n"
-aws route53 change-resource-record-sets --hosted-zone-id Z1ZA9AAUY4V3Z4 --change-batch '{ "Comment": "BitWarden Rust", "Changes": [ { "Action": "CREATE", "ResourceRecordSet": { "Name": "'"${VPS_ENV}"'.'"${DOMAIN_ENV}"'", "Type": "A", "TTL": 120, "ResourceRecords": [ { "Value": "'"${BW_IP}"'" } ] } } ] }' >> /tmp/aws_log
+aws route53 change-resource-record-sets --hosted-zone-id "${AWS_DNS_ZONE}" --change-batch '{ "Comment": "BitWarden Rust", "Changes": [ { "Action": "CREATE", "ResourceRecordSet": { "Name": "'"${VPS_ENV}"'.'"${DOMAIN_ENV}"'", "Type": "A", "TTL": 120, "ResourceRecords": [ { "Value": "'"${BW_IP}"'" } ] } } ] }' >> /tmp/aws_log
 
 declare max_timeout="6000"
 declare timeout_at
