@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -o errexit      # Exit on uncaught errors
+
 declare DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
