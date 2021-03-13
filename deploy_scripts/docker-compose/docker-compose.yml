@@ -23,5 +23,5 @@ services:
       - ./caddy-data:/data
     environment:
       - DOMAIN=fqdn  # Your domain.
-      - EMAIL=email     # The stefan@fluit-online.nl address to use for ACME registration.
+      - EMAIL=email     # The address to use for ACME registration.
       - LOG_FILE=/data/access.log
