@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 declare DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
