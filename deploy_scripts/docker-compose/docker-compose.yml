@@ -22,6 +22,6 @@ services:
       - ./caddy-config:/config
       - ./caddy-data:/data
     environment:
-      - DOMAIN=bitwarden.fluit-online.nl  # Your domain.
-      - EMAIL=stefan+bw@fluit-online.nl      # The email address to use for ACME registration.
+      - DOMAIN=fqdn  # Your domain.
+      - EMAIL=email      # The email address to use for ACME registration.
       - LOG_FILE=/data/access.log

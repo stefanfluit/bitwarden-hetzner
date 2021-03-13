@@ -8,8 +8,11 @@ source "${DIR}../config.sh"
 declare output_ssh_key
 output_ssh_key$(< ${SSH_KEY})
 
-ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_bitwarden -C admin+"${VPS_ENV}"@"${DOMAIN_ENV}"
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_bitwarden -C "${ADMIN_MAIL}"
+sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml
 sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml 
+sed -i "s/fqdn/${VPS_ENV}.${DOMAIN_ENV}/g" "${DIR}"/docker-compose/docker-compose.yml
+sed -i "s/email/${ADMIN_MAIL}/g" "${DIR}"/docker-compose/docker-compose.yml 
 
 printf "Applying Terraform configuration\n"
 cd "${DIR}"../terraform && terraform init &> /dev/null && terraform plan &> /dev/null && terraform apply -auto-approve &> /dev/null && printf "Done!\n"
