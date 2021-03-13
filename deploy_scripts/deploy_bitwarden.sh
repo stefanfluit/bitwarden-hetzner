@@ -3,7 +3,7 @@
 declare DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-. "${DIR}../config.sh"
+. "${DIR}../config/config.sh"
 
 declare output_ssh_key
 output_ssh_key$(< ${SSH_KEY})
