@@ -16,7 +16,7 @@ In order to succesfully generate a HTTPS cert using Let's Encrypt, this script u
 
 ### Terraform:
 #
-The Terraform binary should be available on your system in order to execute the script succesfully. You can find instructions here below. If you don't, the `prereq.sh` script will try to install Terraform for you. This is not tested yet. 
+The Terraform binary should be available on your system in order to execute the script succesfully. You can find instructions here below. If you don't, the `prereq.sh` script will try to install Terraform for you. This is not tested yet and the script must be executed manually. `bash bitwarden-hetzner/config/prereq.sh` 
 
 ```
 https://learn.hashicorp.com/tutorials/terraform/install-cli
