@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  bitwarden:
+    image: bitwardenrs/server:latest
+    container_name: bitwarden
+    restart: always
+    environment:
+      - WEBSOCKET_ENABLED=true  # Enable WebSocket notifications.
+    volumes:
+      - ./bw-data:/data
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: always
+    ports:
+      - 80:80  # Needed for the ACME HTTP-01 challenge.
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-config:/config
+      - ./caddy-data:/data
+    environment:
+      - DOMAIN=bitwarden.fluit-online.nl  # Your domain.
+      - EMAIL=stefan+bw@fluit-online.nl      # The email address to use for ACME registration.
+      - LOG_FILE=/data/access.log
