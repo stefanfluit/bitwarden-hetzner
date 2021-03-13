@@ -5,10 +5,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 . "${DIR}/../config/config.sh"
 
+ssh-keygen -t ed25519 -f "${SSH_KEY}" -C "${ADMIN_MAIL}" -q -N ""
 declare output_ssh_key
 output_ssh_key=$(< ${SSH_KEY})
-
-ssh-keygen -t ed25519 -f "${SSH_KEY}" -C "${ADMIN_MAIL}"
 sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml
 sed -i "s/<ssh-key>/${output_ssh_key}/g" "${DIR}"../terraform/user_data.yml 
 sed -i "s/fqdn/${VPS_ENV}.${DOMAIN_ENV}/g" "${DIR}"/docker-compose/docker-compose.yml
