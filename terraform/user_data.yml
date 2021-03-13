@@ -5,7 +5,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - <ssh-key>
+      - sshkey
 
 package_update: true
 package_upgrade: true
