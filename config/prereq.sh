@@ -15,9 +15,24 @@ install_terraform() {
     ./terraform-install.sh
 }
 
+check_installed() {
+  local -a progrs=("${@}")
+  if [[ $# -eq 0 ]]
+  then
+    printf "No arguments supplied.\nSyntax is like:\n check_installed <Program 1..> <Program 2..> <Etc..> \n"
+  fi
+  for prog in "${progrs[@]}"; do
+    if ! [[ -x "$(command -v "${prog}")" ]]; then
+      printf "Program %s is not installed, installing..\n" "${prog}"
+      install_${prog}
+    else
+      printf "Program %s is installed, proceeding..\n" "${prog}"
+    fi
+  done
+}
+
 main() {
-    aws &> /dev/null && printf "AWS is installed.\n" || install_aws
-    terraform &> /dev/null && printf "Terraform is installed.\n" || install_terraform
+    check_installed "aws" "terraform"
 }
 
 main
