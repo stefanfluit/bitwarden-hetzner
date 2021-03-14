@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "${DIR}/../config/config.sh"
 . "${DIR}/../config/functions.sh"
 
-cli_log "Making sure all the needed software is installed."
+clear && cli_log "Making sure all the needed software is installed."
 check_installed "aws" "terraform"
 
 if [ ! -e "${SSH_KEY}" ]; then
@@ -16,9 +16,10 @@ if [ ! -e "${SSH_KEY}" ]; then
 fi 
 
 cli_log "Adding variables to configuration files.."
-cli_log "Adding your SSH key to user_data.yml"  sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
-cli_log "Adding FQDN to Docker-Compose file.. "  sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
-cli_log "Adding admin maile to Docker-Compose file.. "  sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
+cli_log "Adding your SSH key to user_data.yml.."  && sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
+cli_log "Restricting SSH to your current IP.."  && sed -i "s|sship|${SOURCE_IP}|g" "${DIR}"/../terraform/user_data.yml 
+cli_log "Adding FQDN to Docker-Compose file.. "  && sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
+cli_log "Adding admin maile to Docker-Compose file.. " && sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
 
 cli_log "Applying Terraform configuration"
 cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!"
@@ -59,5 +60,6 @@ until ping -q -c 1 ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null; do
   fi
     cli_log "Caddy and Docker-Compose not up yet.." && sleep 5
 done
+
 cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
 cli_log "Or, connect to the server using SSH: ssh admin@${VPS_ENV}.${DOMAIN_ENV}."
