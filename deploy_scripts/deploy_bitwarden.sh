@@ -4,6 +4,7 @@ declare DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 . "${DIR}/../config/config.sh"
+. "${DIR}/../config/functions.sh"
 
 if [ ! -e "${SSH_KEY}" ]; then
     printf "No SSH key found, generatinf one.\n"
