@@ -17,12 +17,12 @@ sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compos
 sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
 
 cli_log "Applying Terraform configuration"
-cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!\n"
+cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!"
 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 
-cli_log "Adding Bitwarden IP to AWS Route53..\n"
+cli_log "Adding Bitwarden IP to DNS"
 aws route53 change-resource-record-sets --hosted-zone-id "${AWS_DNS_ZONE}" --change-batch '{ "Comment": "BitWarden Rust", "Changes": [ { "Action": "CREATE", "ResourceRecordSet": { "Name": "'"${VPS_ENV}"'.'"${DOMAIN_ENV}"'", "Type": "A", "TTL": 120, "ResourceRecords": [ { "Value": "'"${BW_IP}"'" } ] } } ] }' >> /tmp/aws_log
 
 declare max_timeout="6000"
