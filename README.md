@@ -12,7 +12,7 @@ Prerequisites
 
 ### DNS:
 #
-In order to succesfully generate a HTTPS cert using Let's Encrypt, this script uses AWS Route53 to update an A record with the Terraform outputted IP from the Hetzner server. You can comment out the line and create the A record yourself, or just change the line in the `/bitwarden-hetzner/deploy_scripts/deploy_bitwarden.sh` script and take care of it in a different way.
+In order to succesfully generate a HTTPS cert using Let's Encrypt, this script uses AWS Route53 to update an A record with the Terraform outputted IP from the Hetzner server. If AWS is not setup on your system, the script will install it and ask for an API key itself. I changed the DNS line to a function in `bitwarden-hetzner/config/functions.sh` so you can easily change it. Just make sure to handle the variable IP properly.
 
 ### Terraform:
 #
