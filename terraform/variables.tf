@@ -1,5 +1,5 @@
 variable "hcloud_token" {
-  # default = <your-api-token>
+  default = apitoken
 }
 
 variable "location" {
