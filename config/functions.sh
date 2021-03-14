@@ -50,10 +50,10 @@ add_ssh_id() {
     # Use this function to add unknown key to known hosts without disabling host key verification check.
     local _id="${1}"
     local _ip=$(ping -q -c 1 -t 1 ${_id} | grep PING | sed -e "s/).*//" | sed -e "s/.*(//")
-    ssh-keygen -R "${_id}" >> /dev/null
-    ssh-keygen -R "${_ip}" >> /dev/null
-    ssh-keygen -R "${_id}","${_ip}" >> /dev/null
-    ssh-keyscan -H "${_id}","${_ip}" >> ~/.ssh/known_hosts
-    ssh-keyscan -H "${_ip}" >> ~/.ssh/known_hosts
-    ssh-keyscan -H "${_id}" >> ~/.ssh/known_hosts
+    ssh-keygen -R "${_id}" &> /dev/null
+    ssh-keygen -R "${_ip}" &> /dev/null
+    ssh-keygen -R "${_id}","${_ip}" &> /dev/null
+    ssh-keyscan -H "${_id}","${_ip}" &> "${HOST_KEY_FILE}"
+    ssh-keyscan -H "${_ip}" &> "${HOST_KEY_FILE}"
+    ssh-keyscan -H "${_id}" &> "${HOST_KEY_FILE}"
 }
