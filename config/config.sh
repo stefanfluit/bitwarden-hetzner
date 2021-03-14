@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Variables the script will ask you for, or not if defined here:
+export HCLOUD_API_KEY="apitoken"
+
 # Variables you should change:
 export VPS_ENV="bitwarden"
 export DOMAIN_ENV="example.com"
