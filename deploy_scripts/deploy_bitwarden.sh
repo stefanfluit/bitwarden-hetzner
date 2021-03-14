@@ -15,15 +15,18 @@ if [ ! -e "${SSH_KEY}" ]; then
     export SSH_KEY_OUTPUT=$(<${SSH_KEY})
 fi 
 
-sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
-sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
-sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
+cli_log "Adding variables to configuration files.."
+cli_log "Adding your SSH key to user_data.yml"  sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
+cli_log "Adding FQDN to Docker-Compose file.. "  sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
+cli_log "Adding admin maile to Docker-Compose file.. "  sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
 
 cli_log "Applying Terraform configuration"
 cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!"
 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+cli_log "Verifying SSH host key.."
+add_ssh_id "${BW_IP}" &> /dev/null && cli_log "Succesfully added SSH host key to known_hosts file"
 
 cli_log "Bitwarden IP Address is ${BW_IP}"
 cli_log "Adding Bitwarden IP to DNS."
