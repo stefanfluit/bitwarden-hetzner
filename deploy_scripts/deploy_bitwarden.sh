@@ -10,7 +10,7 @@ cli_log "Making sure all the needed software is installed."
 check_installed "aws" "terraform"
 
 if [ ! -e "${SSH_KEY}" ]; then
-    cli_log "No SSH key found, generatinf one."
+    cli_log "No SSH key found, generating one."
     ssh-keygen -b 4096 -t rsa -f "${SSH_ID_RSA}" -C "${ADMIN_MAIL}" -N ""
     export SSH_KEY_OUTPUT=$(<${SSH_KEY})
 fi 
@@ -25,8 +25,9 @@ cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 
+cli_log "Bitwarden IP Address is ${BW_IP}"
 cli_log "Adding Bitwarden IP to DNS."
-set_dns "${BW_IP}" && cli_log "IP Succesfully updated."
+set_dns "${BW_IP}" && cli_log "IP Succesfully updated." || cli_log "Something went wrong while trying to update DNS, Let's Encrypt will not work!"
 
 declare max_timeout="6000"
 declare timeout_at
