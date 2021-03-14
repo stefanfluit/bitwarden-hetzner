@@ -41,14 +41,14 @@ runcmd:
   - runuser -l admin -c 'wget -O /home/fluit/.zshrc https://raw.githubusercontent.com/stefanfluit/default_files/master/oh_my_zsh/.zshrc'
   - chsh -s $(which zsh) admin
   # Download latest Prometheus Node Exporter
-  # - curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
-  # - tar xvf  $(find $(pwd) -name 'node_exporter*.tar.gz')
-  # - cp $(find $(pwd) -name 'node_exporter*' -type d)/node_exporter /usr/local/bin
-  # - curl -s https://gist.githubusercontent.com/stefanfluit/8d1c7fb1b2af8da487295ada4e64060c/raw/c870e1000b1b22f87cfb5f229bb878f4f786e07b/node_exporter.service >> /etc/systemd/system/node_exporter.service
-  # - groupadd --system node_exporter
-  # - useradd -s /sbin/nologin -r -g node_exporter node_exporter
-  # - systemctl daemon-reload
-  # - systemctl enable node_exporter --now
+  - curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
+  - tar xvf  $(find $(pwd) -name 'node_exporter*.tar.gz')
+  - cp $(find $(pwd) -name 'node_exporter*' -type d)/node_exporter /usr/local/bin
+  - curl -s https://gist.githubusercontent.com/stefanfluit/8d1c7fb1b2af8da487295ada4e64060c/raw/c870e1000b1b22f87cfb5f229bb878f4f786e07b/node_exporter.service >> /etc/systemd/system/node_exporter.service
+  - groupadd --system node_exporter
+  - useradd -s /sbin/nologin -r -g node_exporter node_exporter
+  - systemctl daemon-reload
+  - systemctl enable node_exporter --now
   # Configure Bitwarden Server dir
   - mkdir -p /var/lib/bitwarden_deploy
   # Setup UFW
@@ -58,5 +58,6 @@ runcmd:
   # - ufw allow from <YOUR IP>  to any port 9100
   - ufw allow 443/tcp
   - ufw allow 80/tcp
+  - ufw allow from sship to any port 22
   - ufw allow ssh
   - echo "y" | ufw enable
