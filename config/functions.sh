@@ -57,3 +57,11 @@ add_ssh_id() {
     ssh-keyscan -H "${_ip}" &> "${HOST_KEY_FILE}"
     ssh-keyscan -H "${_id}" &> "${HOST_KEY_FILE}"
 }
+
+check_hcloud_key() {
+  if [ -n "${HCLOUD_API_KEY}" ]; then
+    cli_log "API Key found: ${HCLOUD_API_KEY}"
+  else
+    cli_log "Set API key: " && read -r -s -n HCLOUD_API_KEY
+  fi
+}
