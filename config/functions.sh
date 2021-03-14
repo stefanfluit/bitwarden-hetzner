@@ -6,4 +6,5 @@ cli_log() {
   local arg_
   arg_="${1}"
   printf "Bitwarden Hetzner: %s: %s\n" "${timestamp_}" "${arg_}"
+  printf "Bitwarden Hetzner: %s: %s\n" "${timestamp_}" "${arg_}" >> "${LOG_LOC}"
 }
