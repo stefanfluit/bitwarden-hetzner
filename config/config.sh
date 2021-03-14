@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Variables the script will ask you for, or not if defined here:
-export HCLOUD_API_KEY="apitoken"
+export HCLOUD_API_KEY=""
 
 # Variables you should change:
 export VPS_ENV="bitwarden"
