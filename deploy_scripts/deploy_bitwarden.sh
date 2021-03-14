@@ -22,8 +22,8 @@ cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
 
-cli_log "Adding Bitwarden IP to DNS"
-aws route53 change-resource-record-sets --hosted-zone-id "${AWS_DNS_ZONE}" --change-batch '{ "Comment": "BitWarden Rust", "Changes": [ { "Action": "CREATE", "ResourceRecordSet": { "Name": "'"${VPS_ENV}"'.'"${DOMAIN_ENV}"'", "Type": "A", "TTL": 120, "ResourceRecords": [ { "Value": "'"${BW_IP}"'" } ] } } ] }' >> /tmp/aws_log
+cli_log "Adding Bitwarden IP to DNS."
+set_dns "${BW_IP}" && cli_log "IP Succesfully updated."
 
 declare max_timeout="6000"
 declare timeout_at
