@@ -49,15 +49,15 @@ runcmd:
   - useradd -s /sbin/nologin -r -g node_exporter node_exporter
   - systemctl daemon-reload
   - systemctl enable node_exporter --now
-  # Configure Bitwarden Server dir
-  - mkdir -p /var/lib/bitwarden_deploy
   # Setup UFW
   - ufw default deny incoming
   - ufw default allow outgoing
   # Change this to your IP for Prometheus monitoring
-  # - ufw allow from <YOUR IP>  to any port 9100
+  - ufw allow from sship to any port 9100
   - ufw allow 443/tcp
   - ufw allow 80/tcp
   - ufw allow from sship to any port 22
   - ufw allow ssh
   - echo "y" | ufw enable
+  # Configure Bitwarden Server dir
+  - mkdir -p /var/lib/bitwarden_deploy
