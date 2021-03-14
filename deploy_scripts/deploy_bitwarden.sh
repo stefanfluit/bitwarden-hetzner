@@ -48,5 +48,16 @@ cli_log "Directory exists, moving forward." && sleep 2
 cli_log "Copy the docker compose file and caddy file to server.."
 scp -i "${SSH_ID_RSA}" -r "${DIR}"/docker-compose root@"${BW_IP}":/tmp &> /dev/null
 ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "cp -r /tmp/docker-compose/* /var/lib/bitwarden_deploy" &> /dev/null
-ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null && cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
+ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null
+
+declare max_timeout="6000"
+declare timeout_at
+timeout_at=$(( SECONDS + max_timeout ))
+until ping -q -c 1 ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null; do
+  if (( SECONDS > timeout_at )); then
+    cli_log "Maximum time passed, stopping script." "${max_timeout}" >&2
+  fi
+    cli_log "Caddy and Docker-Compose not up yet.." && sleep 5
+done
+cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
 cli_log "Or, connect to the server using SSH: ssh admin@${VPS_ENV}.${DOMAIN_ENV}."
