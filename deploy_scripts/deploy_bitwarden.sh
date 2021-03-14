@@ -36,8 +36,22 @@ set_dns "${BW_IP}" && cli_log "IP Succesfully updated." || cli_log "Something we
 declare max_timeout="6000"
 declare timeout_at
 timeout_at=$(( SECONDS + max_timeout ))
+until ping -q -c 1 ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null; do
+  if (( SECONDS > timeout_at )); then
+    cli_log "Maximum time passed, stopping script." "${max_timeout}" >&2
+  fi
+    cli_log "Waiting for DNS to be visible before proceeding. Might take a while.." && sleep 10
+done
 
-until ssh -o StrictHostKeyChecking=no -i "${SSH_ID_RSA}" root@"${BW_IP}" '[ -d /var/lib/bitwarden_deploy ]'; do
+cli_log "Verifying SSH host key with FQDN.."
+add_ssh_id ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null && cli_log "Succesfully added SSH host key to known_hosts file"
+
+declare max_timeout="6000"
+declare timeout_at
+timeout_at=$(( SECONDS + max_timeout ))
+
+cli_log "Waiting for User_data script to finish before proceeding.."
+until ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" '[ -d /var/lib/bitwarden_deploy ]'; do
   if (( SECONDS > timeout_at )); then
     cli_log "Maximum time of %s passed, stopping script." "${max_timeout}" >&2
     exit 1
@@ -46,20 +60,10 @@ until ssh -o StrictHostKeyChecking=no -i "${SSH_ID_RSA}" root@"${BW_IP}" '[ -d /
 done
 
 cli_log "Directory exists, moving forward." && sleep 2
-cli_log "Copy the docker compose file and caddy file to server.."
+cli_log "Copy the docker compose file and caddy file to server.." && sleep 2
 scp -i "${SSH_ID_RSA}" -r "${DIR}"/docker-compose root@"${BW_IP}":/tmp &> /dev/null
 ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "cp -r /tmp/docker-compose/* /var/lib/bitwarden_deploy" &> /dev/null
 ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null
-
-declare max_timeout="6000"
-declare timeout_at
-timeout_at=$(( SECONDS + max_timeout ))
-until ping -q -c 1 ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null; do
-  if (( SECONDS > timeout_at )); then
-    cli_log "Maximum time passed, stopping script." "${max_timeout}" >&2
-  fi
-    cli_log "Caddy and Docker-Compose not up yet.." && sleep 5
-done
 
 cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
 cli_log "Or, connect to the server using SSH: ssh admin@${VPS_ENV}.${DOMAIN_ENV}."
