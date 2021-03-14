@@ -34,7 +34,7 @@ add_ssh_id "${BW_IP}" &> /dev/null && cli_log "Succesfully added SSH host key to
 
 cli_log "Bitwarden IP Address is ${BW_IP}"
 cli_log "Adding Bitwarden IP to DNS."
-set_dns "${BW_IP}" && cli_log "IP Succesfully updated." || cli_log "Something went wrong while trying to update DNS, Let's Encrypt will not work!"
+set_dns "${BW_IP}" && cli_log "IP Succesfully updated." || cli_log "Something went wrong while trying to update DNS, Let's Encrypt/HTTPS will not work!"
 
 declare max_timeout="6000"
 declare timeout_at
