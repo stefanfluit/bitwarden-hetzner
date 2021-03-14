@@ -6,6 +6,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "${DIR}/../config/config.sh"
 . "${DIR}/../config/functions.sh"
 
+cli_log "Making sure all the needed software is installed."
+check_installed "aws" "terraform"
+
 if [ ! -e "${SSH_KEY}" ]; then
     cli_log "No SSH key found, generatinf one."
     ssh-keygen -b 4096 -t rsa -f "${SSH_ID_RSA}" -C "${ADMIN_MAIL}" -N ""
