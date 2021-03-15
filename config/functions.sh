@@ -87,6 +87,7 @@ check_log_file() {
 }
 
 check_ssh_key() {
+  # Will edit this later, right now it does not really make sense.
   if [ ! -e "${SSH_KEY}" ]; then
       cli_log "No SSH key found, generating one."
       ssh-keygen -b 4096 -t rsa -f "${SSH_ID_RSA}" -C "${ADMIN_MAIL}" -N "" &> /dev/null
