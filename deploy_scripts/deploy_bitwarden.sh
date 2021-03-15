@@ -11,12 +11,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 clear && cli_log "Making sure all the needed software is installed."
 run_init
 
-if [ ! -e "${SSH_KEY}" ]; then
-    cli_log "No SSH key found, generating one."
-    ssh-keygen -b 4096 -t rsa -f "${SSH_ID_RSA}" -C "${ADMIN_MAIL}" -N "" &> /dev/null
-    export SSH_KEY_OUTPUT=$(<${SSH_KEY})
-fi 
-
 cli_log "Adding variables to configuration files.."
 cli_log "Adding your SSH key to user_data.yml.." && sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
 cli_log "Adding your Hetzner API key to Terraform.." && sed -i "s|apitoken|\"${HCLOUD_API_KEY}\"|g" "${DIR}"/../terraform/variables.tf 
