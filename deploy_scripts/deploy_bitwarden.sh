@@ -38,7 +38,7 @@ until ping -q -c 1 ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null; do
   if (( SECONDS > timeout_at )); then
     cli_log "Maximum time passed, stopping script." "${max_timeout}" >&2
   fi
-    cli_log "Waiting for DNS to be visible before proceeding. Might take a while.." && sleep 10
+    cli_log "Waiting for DNS to be visible before proceeding. Might take a while. The server is installing in the background!" && sleep 45
 done
 
 cli_log "Verifying SSH host key with FQDN.."
