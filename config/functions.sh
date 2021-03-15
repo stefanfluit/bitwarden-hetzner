@@ -78,7 +78,7 @@ check_log_file() {
   if [ -f "$LOG_LOC" ]; then
       cli_log "Log file exist, adding note of this next run."
       printf "==============================================================\n" >> "${LOG_LOC}"
-      printf "Run ID: $(date +%s%N | cut -b1-13)" >> "${LOG_LOC}"
+      printf "Run ID: $(date +%s%N | cut -b1-13)\n" >> "${LOG_LOC}"
       printf "==============================================================\n" >> "${LOG_LOC}"
   else 
       cli_log "${LOG_LOC} does not exist, creating it."
