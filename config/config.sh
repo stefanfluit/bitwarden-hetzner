@@ -2,13 +2,12 @@
 
 # Variables the script will ask you for, or not if defined here:
 export HCLOUD_API_KEY=""
-
 # Hostname variable, e.g. "bitwarden", or leave empty, and the script will ask you.
 export VPS_ENV=""
 # Domain variable, e.g. "example.com", or leave empty, and the script will ask you.
 export DOMAIN_ENV=""
 
-# Variables you can change, but not needed:
+# Other variables you don't have to change at all. 
 export USER_=$(whoami)
 export SSH_KEY="/home/${USER_}/.ssh/bw_key_id_rsa.pub"
 export HOST_KEY_FILE="/home/${USER_}/.ssh/known_hosts"
