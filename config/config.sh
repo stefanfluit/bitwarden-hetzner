@@ -17,4 +17,4 @@ export LOG_LOC="/home/${USER_}/.BW_HETZNER_RUST.LOG"
 export SOURCE_IP=$(dig @resolver4.opendns.com myip.opendns.com +short)
 
 # Remove this or uncomment if you're not using Route53:
-export AWS_DNS_ZONE="<Zone ID>"
+export AWS_DNS_ZONE="Zone ID"
