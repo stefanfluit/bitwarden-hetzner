@@ -64,7 +64,7 @@ check_hcloud_key() {
     cli_log "API Key found: ${HCLOUD_API_KEY}"
   else
     cli_log "Set API key: " && read -s HCLOUD_API_KEY
-      if [[ -z "$HCLOUD_API_KEY" ]]; then
+      if [[ -z "${HCLOUD_API_KEY}" ]]; then
         cli_log "No input entered, exit script."
         exit 1;
       else
