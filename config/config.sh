@@ -3,9 +3,10 @@
 # Variables the script will ask you for, or not if defined here:
 export HCLOUD_API_KEY=""
 
-# Variables you should change:
-export VPS_ENV="bitwarden"
-export DOMAIN_ENV="example.com"
+# Hostname variable, e.g. "bitwarden", or leave empty, and the script will ask you.
+export VPS_ENV=""
+# Domain variable, e.g. "example.com", or leave empty, and the script will ask you.
+export DOMAIN_ENV=""
 
 # Variables you can change, but not needed:
 export USER_=$(whoami)
