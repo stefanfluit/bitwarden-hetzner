@@ -49,7 +49,7 @@ declare timeout_at
 timeout_at=$(( SECONDS + max_timeout ))
 
 cli_log "Waiting for User_data script to finish before proceeding.."
-until ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" '[ -d /var/lib/bitwarden_deploy ]'; do
+until ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" '[ -d /var/lib/bitwarden_deploy ]'; do
   if (( SECONDS > timeout_at )); then
     cli_log "Maximum time of %s passed, stopping script." "${max_timeout}" >&2
     exit 1
@@ -59,9 +59,9 @@ done
 
 cli_log "Directory exists, moving forward." && sleep 2
 cli_log "Copy the docker compose file and caddy file to server.." && sleep 2
-scp -i "${SSH_ID_RSA}" -r "${DIR}"/docker-compose root@"${BW_IP}":/tmp &> /dev/null
-ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "cp -r /tmp/docker-compose/* /var/lib/bitwarden_deploy" &> /dev/null
-ssh -i "${SSH_ID_RSA}" root@"${BW_IP}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null
+scp -i "${SSH_ID_RSA}" -r "${DIR}"/docker-compose root@"${VPS_ENV}.${DOMAIN_ENV}":/tmp &> /dev/null
+ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" "cp -r /tmp/docker-compose/* /var/lib/bitwarden_deploy" &> /dev/null
+ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null
 
 cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
 cli_log "Or, connect to the server using SSH: ssh admin@${VPS_ENV}.${DOMAIN_ENV}."
