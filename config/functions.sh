@@ -86,8 +86,17 @@ check_log_file() {
   fi
 }
 
+check_ssh_key() {
+  if [ ! -e "${SSH_KEY}" ]; then
+      cli_log "No SSH key found, generating one."
+      ssh-keygen -b 4096 -t rsa -f "${SSH_ID_RSA}" -C "${ADMIN_MAIL}" -N "" &> /dev/null
+      export SSH_KEY_OUTPUT=$(<${SSH_KEY})
+  fi
+}
+
 run_init() {
   check_installed "aws" "terraform"
   check_hcloud_key
   check_log_file
+  check_ssh_key
 }
