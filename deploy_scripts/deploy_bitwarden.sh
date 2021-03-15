@@ -12,7 +12,8 @@ clear && cli_log "Making sure all the needed software is installed."
 run_init
 
 cli_log "Adding variables to configuration files.."
-cli_log "Adding your SSH key to user_data.yml.." && sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml 
+cli_log "Adding your SSH key to user_data.yml.." && sed -i "s|sshkey|${SSH_KEY_OUTPUT}|g" "${DIR}"/../terraform/user_data.yml
+cli_log "Adding your SSH key to SSH Terraform file.." && sed -i "s|sshkey|${SSH_KEY}|g" "${DIR}"/../terraform/ssh.tf  
 cli_log "Adding your Hetzner API key to Terraform.." && sed -i "s|apitoken|\"${HCLOUD_API_KEY}\"|g" "${DIR}"/../terraform/variables.tf 
 cli_log "Restricting SSH to your current IP.." && sed -i "s|sship|${SOURCE_IP}|g" "${DIR}"/../terraform/user_data.yml 
 cli_log "Adding FQDN to Docker-Compose file.. " && sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
