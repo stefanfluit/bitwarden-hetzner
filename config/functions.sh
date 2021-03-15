@@ -63,6 +63,18 @@ check_hcloud_key() {
   if [ -n "${HCLOUD_API_KEY}" ]; then
     cli_log "API Key found: ${HCLOUD_API_KEY}"
   else
-    cli_log "Set API key: " && read -r -s -n HCLOUD_API_KEY
+    cli_log "Set API key: " && read -s HCLOUD_API_KEY
+      if [[ -z "$HCLOUD_API_KEY" ]]; then
+        cli_log "No input entered, exit script."
+        exit 1;
+      else
+        # If userInput is not empty show what the user typed in and run ls -l
+        cli_log "Input detected, API key is ${HCLOUD_API_KEY}"
+      fi
   fi
+}
+
+run_init() {
+  check_installed "aws" "terraform"
+  check_hcloud_key
 }
