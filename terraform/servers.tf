@@ -1,6 +1,6 @@
-resource "hcloud_server" "cloud" {
+resource "hcloud_server" "bitwarden-rust" {
   count       = var.instances
-  name        = "hcloud-server-bitwarden"
+  name        = "hcloud-server-bitwarden-rust"
   image       = var.os_type
   server_type = var.server_type
   location    = var.location
