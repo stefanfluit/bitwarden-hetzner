@@ -17,7 +17,7 @@ cli_log "Adding your SSH key to SSH Terraform file.." && sed -i "s|sshkey|${SSH_
 cli_log "Adding your Hetzner API key to Terraform.." && sed -i "s|apitoken|\"${HCLOUD_API_KEY}\"|g" "${DIR}"/../terraform/variables.tf 
 cli_log "Restricting SSH to your current IP.." && sed -i "s|sship|${SOURCE_IP}|g" "${DIR}"/../terraform/user_data.yml 
 cli_log "Adding FQDN to Docker-Compose file.. " && sed -i "s|fqdn|${VPS_ENV}.${DOMAIN_ENV}|g" "${DIR}"/docker-compose/docker-compose.yml
-cli_log "Adding admin maile to Docker-Compose file.. " && sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
+cli_log "Adding ${USER_} mail to Docker-Compose file.. " && sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
 
 cli_log "Applying Terraform configuration"
 cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!" || exit 1;
@@ -64,4 +64,4 @@ ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" "cp -r /tmp/docker-compos
 ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" "docker-compose -f /var/lib/bitwarden_deploy/docker-compose.yml up -d" &> /dev/null
 
 cli_log "Done! Access BitWarden now on https://${VPS_ENV}.${DOMAIN_ENV}"
-cli_log "Or, connect to the server using SSH: ssh admin@${VPS_ENV}.${DOMAIN_ENV}."
+cli_log "Or, connect to the server using SSH: ssh -i ${SSH_ID_RSA} ${USER_}@${VPS_ENV}.${DOMAIN_ENV}."
