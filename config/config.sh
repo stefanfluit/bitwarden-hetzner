@@ -9,7 +9,7 @@ export DOMAIN_ENV="example.com"
 
 # Variables you can change, but not needed:
 export USER_=$(whoami)
-export SSH_KEY="/home/${USER_}/.ssh/bw_$(date +%s%N | cut -b1-13)_id_rsa.pub"
+export SSH_KEY="/home/${USER_}/.ssh/bw_key_id_rsa.pub"
 export HOST_KEY_FILE="/home/${USER_}/.ssh/known_hosts"
 export SSH_ID_RSA=$(echo "${SSH_KEY}" | cut -f1,2 -d'.')
 export ADMIN_MAIL="admin@${DOMAIN_ENV}"
