@@ -68,10 +68,25 @@ check_hcloud_key() {
         cli_log "No input entered, exit script."
         exit 1;
       else
-        # If userInput is not empty show what the user typed in and run ls -l
         cli_log "Input detected, API key is ${HCLOUD_API_KEY}"
       fi
   fi
+}
+
+check_hostname() {
+  if [[ -z "${VPS_ENV}" ]]; then
+    read -p "No hostname detected. What do you want the hostname to be? " VPS_INPUT
+    export VPS_ENV=$(echo ${VPS_INPUT})
+  else
+    cli_log "Hostname detected, hostname is ${VPS_ENV}"
+  fi
+  if [[ -z "${DOMAIN_ENV}" ]]; then
+    read -p "No domain detected. What do you want the domain to be? " DOMAIN_INPUT
+    export DOMAIN_ENV=$(echo ${DOMAIN_INPUT})
+  else
+    cli_log "Domain detected, domain is ${DOMAIN_ENV}"
+  fi
+    cli_log "FQDN is ${VPS_ENV}.${DOMAIN_ENV}"
 }
 
 check_log_file() {
@@ -100,4 +115,5 @@ run_init() {
   check_hcloud_key
   check_log_file
   check_ssh_key
+  check_hostname
 }
