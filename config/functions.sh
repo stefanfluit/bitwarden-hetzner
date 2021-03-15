@@ -5,8 +5,8 @@ cli_log() {
   timestamp_=$(date +"%H:%M")
   local arg_
   arg_="${1}"
-  printf "Bitwarden Hetzner: %s: %s\n" "${timestamp_}" "${arg_}"
-  printf "Bitwarden Hetzner: %s: %s\n" "${timestamp_}" "${arg_}" >> "${LOG_LOC}"
+  printf "Bitwarden Hetzner - %s: %s\n" "${timestamp_}" "${arg_}"
+  printf "Bitwarden Hetzner - %s: %s\n" "${timestamp_}" "${arg_}" >> "${LOG_LOC}"
 }
 
 set_dns() {
@@ -34,14 +34,15 @@ check_installed() {
   local -a progrs=("${@}")
   if [[ $# -eq 0 ]]
   then
-    printf "No arguments supplied.\nSyntax is like:\n check_installed <Program 1..> <Program 2..> <Etc..> \n"
+    cli_log "No arguments supplied. Syntax is like: check_installed <Program 1..> <Program 2..> <Etc..>"
+    exit 1;
   fi
   for prog in "${progrs[@]}"; do
     if ! [[ -x "$(command -v "${prog}")" ]]; then
-      printf "Program %s is not installed, installing..\n" "${prog}"
+      cli_log "Program ${prog} is not installed, installing.."
       install_${prog}
     else
-      printf "Program %s is installed, proceeding..\n" "${prog}"
+      cli_log "Program ${prog} is installed, proceeding.."
     fi
   done
 }
