@@ -12,24 +12,19 @@ Prerequisites
 ===========
 
 ### DNS:
-#
 In order to succesfully generate a HTTPS cert using Let's Encrypt, this script uses AWS Route53 to update an A record with the Terraform outputted IP from the Hetzner server. If AWS is not setup on your system, the script will install it and ask for an API key itself. I changed the DNS line to a function in `bitwarden-hetzner/config/functions.sh` so you can easily change it. Just make sure to handle the variable IP properly.
 
 ### Terraform:
-#
 The Terraform binary should be available on your system in order to execute the script succesfully. You can find instructions here below. If you don't, the `prereq.sh` script will try to install Terraform for you. This is not tested yet and the script must be executed manually. `bash bitwarden-hetzner/config/prereq.sh` 
 
-```
 https://learn.hashicorp.com/tutorials/terraform/install-cli
-```
 
 ### Hetzner Cloud:
-# 
 To create an account use the link below. You will need an API key for the environment you want the VM in. The script will ask for it at some point, or hardcode it in the `/bitwarden-hetzner/terraform/provider.tf`. 
 
 #### Create an account:
 ```
-https://accounts.hetzner.com/account/masterdata
+https://accounts.hetzner.com/account
 ```
 #### Create an API key:
 ```
