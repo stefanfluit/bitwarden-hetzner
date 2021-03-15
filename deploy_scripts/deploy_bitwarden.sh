@@ -20,7 +20,7 @@ cli_log "Adding FQDN to Docker-Compose file.. " && sed -i "s|fqdn|${VPS_ENV}.${D
 cli_log "Adding admin maile to Docker-Compose file.. " && sed -i "s|email|${ADMIN_MAIL}|g" "${DIR}"/docker-compose/docker-compose.yml 
 
 cli_log "Applying Terraform configuration"
-cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!" || cli_log "ERROR, Script will exit." && exit 1;
+cd "${DIR}"/../terraform && terraform init && terraform plan && terraform apply -auto-approve && cli_log "Done!" || exit 1;
 
 declare BW_IP
 BW_IP=$(terraform output | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
