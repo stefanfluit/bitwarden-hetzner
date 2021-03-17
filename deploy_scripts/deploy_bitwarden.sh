@@ -46,7 +46,7 @@ add_ssh_id ${VPS_ENV}.${DOMAIN_ENV} &> /dev/null && cli_log "Succesfully added S
 
 declare max_timeout="6000"
 declare timeout_at
-timeout_at=$(( SECONDS + max_timeout ))
+timeout_at=$(( SECONDS + max_timeout )) 
 
 cli_log "Waiting for User_data script to finish before proceeding.."
 until ssh -i "${SSH_ID_RSA}" root@"${VPS_ENV}.${DOMAIN_ENV}" '[ -d /var/lib/bitwarden_deploy ]'; do
